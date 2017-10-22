@@ -1,7 +1,7 @@
 // Get the packages we need
 var express = require('express'),
     router = express.Router(),
-    mongoose = require('mongoose'),
+    mongoose = require('mongoose').set('debug', true),
     secrets = require('./config/secrets'),
     bodyParser = require('body-parser');
 
