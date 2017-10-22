@@ -90,6 +90,7 @@ module.exports = function (router) {
                 updatedTask.name = req.body.name;
                 updatedTask.description = req.body.description;
                 updatedTask.deadline = req.body.deadline;
+                updatedTask.completed = req.body.completed;
                 updatedTask.assignedUser = req.body.assignedUser;
                 updatedTask.assignedUserName = req.body.assignedUserName;
                 updatedTask.dateCreated = req.body.dateCreated;
