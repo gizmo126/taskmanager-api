@@ -81,28 +81,39 @@ module.exports = function (router) {
 
     /* PUT - Replace entire task with supplied task or 404 error */
     taskIdRouter.put(function (req, res) {
-        Task.findById(new mongoose.Types.ObjectId(req.params.id), function(err, updatedTask){
-            if(err) {
-                res.status(404).send({ message: "ERROR: Could Not Find Given Task", data: err });
-            } else if(updatedTask === null){
-                res.status(404).json({ message: "ERROR: No Such Task to Update", data: null });
-            } else {
-                updatedTask.name = req.body.name;
-                updatedTask.description = req.body.description;
-                updatedTask.deadline = req.body.deadline;
-                updatedTask.completed = req.body.completed;
-                updatedTask.assignedUser = req.body.assignedUser;
-                updatedTask.assignedUserName = req.body.assignedUserName;
-                updatedTask.dateCreated = req.body.dateCreated;
-                updatedTask.save(function(err){
-                    if(err){
-                        res.status(404).send({ message: "ERROR: Could Not Replace Given Task", data: err });
-                    } else {
-                        res.status(200).json({ message: "OK: Task Updated", data: updatedTask });
-                    }
-                });
-            }
-        });
+      var validPut = true;
+      if(req.body.name === ''){
+          res.status(500).json({ message: "ERROR: You must input a valid name", data: null });
+          validPut = false;
+      }
+      if(req.body.deadline === null){
+          res.status(500).json({ message: "ERROR: You must set a valid deadline", data: null });
+          validPut = false;
+      }
+      if(validPut){
+            Task.findById(new mongoose.Types.ObjectId(req.params.id), function(err, updatedTask){
+                if(err) {
+                    res.status(404).send({ message: "ERROR: Could Not Find Given Task", data: err });
+                } else if(updatedTask === null){
+                    res.status(404).json({ message: "ERROR: No Such Task to Update", data: null });
+                } else {
+                    updatedTask.name = req.body.name;
+                    updatedTask.description = req.body.description;
+                    updatedTask.deadline = req.body.deadline;
+                    updatedTask.completed = req.body.completed;
+                    updatedTask.assignedUser = req.body.assignedUser;
+                    updatedTask.assignedUserName = req.body.assignedUserName;
+                    updatedTask.dateCreated = req.body.dateCreated;
+                    updatedTask.save(function(err){
+                        if(err){
+                            res.status(404).send({ message: "ERROR: Could Not Replace Given Task", data: err });
+                        } else {
+                            res.status(200).json({ message: "OK: Task Updated", data: updatedTask });
+                        }
+                    });
+                }
+            });
+        }
     });
 
     /* DELETE - Delete specified task or 404 error */
